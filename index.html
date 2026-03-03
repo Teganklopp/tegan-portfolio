@@ -3,335 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tegan Klopper</title>
+<title>Tegan Klopper — Product Lead</title>
 <style>
   :root {
-    --cream: #F2EDE4;
-    --black: #111111;
-    --green: #8BAD78;
-    --yellow: #F5C842;
-    --purple: #9B7FD4;
-    --white: #FAFAF8;
-    --gray: #6b6b6b;
+    --bg: #080C10;
+    --surface: #0D1117;
+    --border: rgba(255,255,255,0.07);
+    --text: #E8EDF2;
+    --muted: #6B7685;
+    --accent: #8BAD78;
+    --accent2: #6B9158;
+    --accent3: #8BAD78;
+    --white: #ffffff;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
   body {
-    background: var(--cream);
-    color: var(--black);
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Inter', 'Helvetica Neue', sans-serif;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:0.4;
   }
 
   /* NAV */
   nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2rem 2.5rem;
-    background: var(--cream);
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    transition: box-shadow 0.3s;
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 2rem; height:60px;
+    background: rgba(8,12,16,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
   }
-  nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
-  .nav-logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-logo {
+    font-size:0.85rem; font-weight:600; letter-spacing:0.02em;
+    color: var(--text); display:flex; align-items:center; gap:0.6rem;
+  }
+  .nav-logo-dot {
+    width:8px; height:8px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .nav-links { display:flex; gap:1.8rem; list-style:none; }
   .nav-links a {
-    text-decoration: none; color: var(--black); font-size: 0.8rem;
-    letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500;
-    opacity: 0.6; transition: opacity 0.2s;
+    text-decoration:none; color:var(--muted); font-size:0.82rem;
+    transition:color 0.2s; letter-spacing:0.01em;
   }
-  .nav-links a:hover { opacity: 1; }
+  .nav-links a:hover { color:var(--text); }
   .nav-cta {
-    background: var(--black); color: var(--cream);
-    padding: 0.5rem 1.2rem; border-radius: 2rem;
-    font-size: 0.78rem; letter-spacing: 0.05em; font-weight: 600;
-    text-decoration: none; text-transform: uppercase;
-    transition: background 0.2s, transform 0.2s;
+    background: var(--accent); color: var(--bg);
+    padding:0.45rem 1.1rem; border-radius:6px;
+    font-size:0.8rem; font-weight:600; text-decoration:none;
+    transition:opacity 0.2s, transform 0.2s;
+    letter-spacing:0.02em;
   }
-  .nav-cta:hover { background: var(--green); transform: scale(1.03); }
+  .nav-cta:hover { opacity:0.85; transform:translateY(-1px); }
 
   /* HERO */
   #hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 8rem 2.5rem 4rem;
-    position: relative; overflow: hidden;
+    min-height:100vh; display:flex; flex-direction:column;
+    justify-content:center; padding:8rem 2rem 4rem;
+    position:relative; overflow:hidden;
   }
-  .hero-tag {
-    display: inline-block;
-    background: var(--green); color: var(--black);
-    padding: 0.4rem 1rem; border-radius: 2rem;
-    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; margin-bottom: 1.5rem;
+  .hero-grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 40%, transparent 100%);
   }
-  .hero-headline {
-    font-size: clamp(3.5rem, 9vw, 9rem);
-    font-weight: 800; line-height: 0.93;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
+  .hero-glow {
+    position:absolute; top:-200px; left:50%;
+    transform:translateX(-50%);
+    width:700px; height:500px; border-radius:50%;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events:none;
   }
-  .hero-headline span { color: var(--green); }
+  .hero-glow2 {
+    position:absolute; bottom:-100px; right:-100px;
+    width:500px; height:500px; border-radius:50%;
+    background: radial-gradient(ellipse, rgba(124,58,237,0.07) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .hero-inner { position:relative; z-index:1; max-width:900px; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--border); border-radius:100px;
+    padding:0.35rem 0.9rem; margin-bottom:2rem;
+    font-size:0.75rem; color:var(--muted); letter-spacing:0.04em;
+    background: rgba(255,255,255,0.03);
+  }
+  .hero-badge-dot { width:6px; height:6px; border-radius:50%; background:var(--accent3); box-shadow:0 0 6px var(--accent3); }
+  h1 {
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight:800; line-height:1.0;
+    letter-spacing:-0.04em; margin-bottom:1.5rem;
+    color:var(--white);
+  }
+  h1 .grad {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
   .hero-sub {
-    margin-top: 2rem; max-width: 520px;
-    font-size: 1.05rem; line-height: 1.65; color: var(--gray);
+    font-size:1.1rem; line-height:1.75; color:var(--muted);
+    max-width:540px; margin-bottom:2.5rem;
   }
-  .hero-bottom {
-    display: flex; align-items: center; gap: 2rem;
-    margin-top: 3rem; flex-wrap: wrap;
+  .hero-actions { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:4rem; }
+  .btn-primary {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--accent); color:var(--bg);
+    padding:0.75rem 1.6rem; border-radius:8px;
+    font-size:0.85rem; font-weight:700; text-decoration:none;
+    transition:all 0.2s; letter-spacing:0.02em;
   }
-  .btn {
-    display: inline-block; text-decoration: none;
-    padding: 0.85rem 2rem; border-radius: 3rem;
-    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em;
-    text-transform: uppercase; transition: all 0.2s;
+  .btn-primary:hover { opacity:0.85; transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,212,255,0.25); }
+  .btn-secondary {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--border); color:var(--text);
+    padding:0.75rem 1.6rem; border-radius:8px;
+    font-size:0.85rem; font-weight:600; text-decoration:none;
+    transition:all 0.2s; background: rgba(255,255,255,0.03);
   }
-  .btn-dark { background: var(--black); color: var(--cream); }
-  .btn-dark:hover { background: var(--green); color: var(--black); transform: translateY(-2px); }
-  .btn-outline { border: 2px solid var(--black); color: var(--black); }
-  .btn-outline:hover { background: var(--black); color: var(--cream); transform: translateY(-2px); }
+  .btn-secondary:hover { border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); transform:translateY(-2px); }
   .hero-stats {
-    display: flex; gap: 2.5rem; flex-wrap: wrap; margin-top: 1rem;
+    display:flex; gap:0; border:1px solid var(--border);
+    border-radius:12px; overflow:hidden; width:fit-content;
+    background:rgba(255,255,255,0.02);
   }
-  .stat { text-align: left; }
-  .stat-num { font-size: 1.8rem; font-weight: 800; line-height: 1; }
-  .stat-label { font-size: 0.72rem; color: var(--gray); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.2rem; }
-  .hero-scroll {
-    position: absolute; bottom: 2rem; right: 2.5rem;
-    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--gray); writing-mode: vertical-rl; opacity: 0.5;
-    animation: nudge 2s ease-in-out infinite;
+  .stat {
+    padding:1.2rem 2rem; border-right:1px solid var(--border);
   }
-  @keyframes nudge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-  .hero-deco {
-    position: absolute; top: 7rem; right: -60px;
-    width: 420px; height: 420px; border-radius: 50%;
-    background: var(--green); opacity: 0.12;
-    pointer-events: none;
+  .stat:last-child { border-right:none; }
+  .stat-num {
+    font-size:1.6rem; font-weight:800; color:var(--white);
+    letter-spacing:-0.03em;
   }
-  .hero-deco2 {
-    position: absolute; top: 12rem; right: 80px;
-    width: 200px; height: 200px; border-radius: 50%;
-    background: var(--yellow); opacity: 0.18;
-    pointer-events: none;
-  }
+  .stat-num span { color:var(--accent); }
+  .stat-label { font-size:0.7rem; color:var(--muted); letter-spacing:0.05em; text-transform:uppercase; margin-top:0.2rem; }
 
-  /* SECTION BASICS */
-  section { padding: 6rem 2.5rem; }
-  .section-label {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--gray);
-    margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.7rem;
+  /* SECTION BASE */
+  section { padding:7rem 2rem; position:relative; }
+  .container { max-width:1100px; margin:0 auto; }
+  .section-eyebrow {
+    font-size:0.72rem; font-weight:700; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--accent);
+    margin-bottom:1rem; display:flex; align-items:center; gap:0.6rem;
   }
-  .section-label::before {
-    content: ''; display: block; width: 24px; height: 2px;
-    background: var(--green);
+  .section-eyebrow::before { content:'//'; opacity:0.5; }
+  .section-heading {
+    font-size:clamp(1.8rem, 4vw, 3rem); font-weight:800;
+    letter-spacing:-0.03em; color:var(--white); margin-bottom:3rem;
+    line-height:1.1;
   }
-  .section-title {
-    font-size: clamp(2rem, 5vw, 4rem);
-    font-weight: 800; letter-spacing: -0.03em;
-    text-transform: uppercase; line-height: 1;
-    margin-bottom: 3rem;
-  }
+  .section-heading span { color:var(--muted); font-weight:400; }
 
   /* ABOUT */
-  #about { background: var(--black); color: var(--cream); }
-  #about .section-label { color: rgba(255,255,255,0.4); }
-  #about .section-label::before { background: var(--green); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  #about { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .about-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
   .about-text p {
-    font-size: 1.05rem; line-height: 1.85;
-    color: rgba(255,255,255,0.75); margin-bottom: 2rem;
+    font-size:1rem; line-height:1.85; color:var(--muted);
+    margin-bottom:1.8rem;
   }
-  .about-text p strong { color: var(--cream); font-weight: 700; }
-  .about-highlight {
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 800; line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--cream);
+  .about-text p:last-child { margin-bottom:0; }
+  .about-text strong { color:var(--text); font-weight:600; }
+  .skill-cards { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+  .skill-card {
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:10px; padding:1rem 1.1rem;
+    transition:border-color 0.2s, background 0.2s;
   }
-  .about-highlight span { color: var(--green); }
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
-  .skill-chip {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    padding: 0.6rem 1rem; border-radius: 0.5rem;
-    font-size: 0.8rem; color: rgba(255,255,255,0.65);
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .skill-chip:hover { background: rgba(139,173,120,0.2); border-color: var(--green); color: var(--cream); }
-  .skill-chip strong { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--green); margin-bottom: 0.3rem; }
+  .skill-card:hover { border-color:rgba(0,212,255,0.3); background:rgba(0,212,255,0.03); }
+  .skill-card-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.4rem; }
+  .skill-card-text { font-size:0.78rem; color:var(--muted); line-height:1.5; }
 
-  /* EXPERIENCE TIMELINE */
-  #experience { background: var(--cream); }
-  .exp-list { max-width: 900px; }
+  /* EXPERIENCE */
+  #experience { }
+  .exp-items { border:1px solid var(--border); border-radius:12px; overflow:hidden; }
   .exp-item {
-    display: grid; grid-template-columns: 120px 1fr;
-    gap: 2rem; padding: 2rem 0;
-    border-top: 1px solid rgba(0,0,0,0.1);
-    cursor: pointer;
-    transition: all 0.2s;
+    display:grid; grid-template-columns:160px 1fr auto;
+    gap:2rem; padding:1.8rem 2rem; cursor:pointer;
+    border-bottom:1px solid var(--border);
+    transition:background 0.2s;
+    align-items:start;
   }
-  .exp-item:hover .exp-title { color: var(--green); }
-  .exp-date { font-size: 0.78rem; color: var(--gray); letter-spacing: 0.05em; padding-top: 0.2rem; }
-  .exp-role { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--green); margin-bottom: 0.4rem; }
-  .exp-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.6rem; transition: color 0.2s; }
-  .exp-desc { font-size: 0.9rem; line-height: 1.7; color: var(--gray); max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s; opacity: 0; }
-  .exp-item.open .exp-desc { max-height: 300px; opacity: 1; }
-  .exp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
-  .exp-tag {
-    background: rgba(0,0,0,0.06); padding: 0.25rem 0.7rem;
-    border-radius: 2rem; font-size: 0.7rem; letter-spacing: 0.04em; color: var(--gray);
-  }
-  .exp-arrow { font-size: 1rem; color: var(--gray); transition: transform 0.3s; display: inline-block; margin-left: 0.5rem; }
-  .exp-item.open .exp-arrow { transform: rotate(180deg); }
+  .exp-item:last-child { border-bottom:none; }
+  .exp-item:hover { background:rgba(255,255,255,0.02); }
+  .exp-item.open { background:rgba(0,212,255,0.03); }
+  .exp-date { font-size:0.75rem; color:var(--muted); font-family:'Courier New', monospace; padding-top:0.3rem; }
+  .exp-main {}
+  .exp-company { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent); margin-bottom:0.3rem; }
+  .exp-role-title { font-size:1.05rem; font-weight:700; color:var(--white); margin-bottom:0; letter-spacing:-0.01em; }
+  .exp-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s; opacity:0; }
+  .exp-item.open .exp-body { max-height:300px; opacity:1; margin-top:1rem; }
+  .exp-body p { font-size:0.85rem; color:var(--muted); line-height:1.75; }
+  .exp-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem; }
+  .exp-tag { background:rgba(255,255,255,0.05); border:1px solid var(--border); padding:0.2rem 0.65rem; border-radius:100px; font-size:0.68rem; color:var(--muted); }
+  .exp-toggle { color:var(--muted); font-size:0.85rem; transition:transform 0.3s; padding-top:0.3rem; }
+  .exp-item.open .exp-toggle { transform:rotate(180deg); color:var(--accent); }
 
-  /* WORK / CASE STUDIES */
-  #work { background: var(--white); }
-  .work-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-  .work-card {
-    background: var(--cream); border-radius: 1rem; overflow: hidden;
-    cursor: pointer; transition: transform 0.25s, box-shadow 0.25s;
-    position: relative;
+  /* PROJECTS */
+  #work { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .projects-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .project-card {
+    background:var(--surface); padding:1.8rem;
+    cursor:pointer; transition:background 0.2s;
+    position:relative; overflow:hidden;
   }
-  .work-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
-  .work-card-color {
-    height: 160px; display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; font-weight: 900; letter-spacing: -0.04em;
-    text-transform: uppercase; color: rgba(0,0,0,0.75);
-    line-height: 1;
-    transition: letter-spacing 0.3s;
-    position: relative; overflow: hidden;
+  .project-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    transform:scaleX(0); transform-origin:left;
+    transition:transform 0.3s;
   }
-  .work-card:hover .work-card-color { letter-spacing: -0.02em; }
-  .work-card-body { padding: 1.2rem 1.4rem 1.4rem; }
-  .work-card-type { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); margin-bottom: 0.4rem; }
-  .work-card-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-  .work-card-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.6; }
-  .work-card-outcome {
-    display: inline-block; margin-top: 0.8rem;
-    background: var(--black); color: var(--cream);
-    padding: 0.3rem 0.8rem; border-radius: 2rem;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+  .project-card:hover { background:rgba(255,255,255,0.03); }
+  .project-card:hover::before { transform:scaleX(1); }
+  .project-icon {
+    width:36px; height:36px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; margin-bottom:1.1rem;
+    border:1px solid var(--border);
   }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; z-index: 200;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-    align-items: center; justify-content: center; padding: 1.5rem;
+  .project-type { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.4rem; }
+  .project-name { font-size:1.05rem; font-weight:700; color:var(--white); margin-bottom:0.6rem; letter-spacing:-0.01em; }
+  .project-desc { font-size:0.8rem; color:var(--muted); line-height:1.65; margin-bottom:1rem; }
+  .project-metric {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    font-size:0.72rem; font-weight:600; color:var(--accent3);
+    background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2);
+    padding:0.25rem 0.7rem; border-radius:100px;
   }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--cream); max-width: 680px; width: 100%;
-    max-height: 85vh; overflow-y: auto; border-radius: 1.2rem;
-    padding: 2.5rem; position: relative;
-    animation: modalIn 0.3s ease;
-  }
-  @keyframes modalIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
-  .modal-close {
-    position: absolute; top: 1.2rem; right: 1.2rem;
-    background: rgba(0,0,0,0.08); border: none; cursor: pointer;
-    width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-  }
-  .modal-close:hover { background: rgba(0,0,0,0.18); }
-  .modal-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.8rem; }
-  .modal-title { font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
-  .modal-section { margin-bottom: 1.5rem; }
-  .modal-section h4 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem; margin-bottom: 0.6rem; }
-  .modal-section p, .modal-section li { font-size: 0.9rem; line-height: 1.75; color: #333; }
-  .modal-section ul { padding-left: 1.2rem; }
-  .modal-section li { margin-bottom: 0.4rem; }
-  .modal-outcome {
-    background: var(--black); color: var(--cream);
-    padding: 1.2rem 1.5rem; border-radius: 0.8rem; margin-top: 1rem;
-  }
-  .modal-outcome p { color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.7; }
-  .modal-outcome strong { color: var(--green); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.4rem; }
+  .project-arrow { margin-left:auto; color:var(--muted); font-size:0.75rem; display:block; margin-top:0.8rem; transition:color 0.2s; }
+  .project-card:hover .project-arrow { color:var(--accent); }
 
   /* TOOLKIT */
-  #toolkit { background: var(--cream); }
-  .toolkit-categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
-  .toolkit-cat {
-    background: var(--white); border-radius: 1rem; padding: 1.5rem;
-    border: 1px solid rgba(0,0,0,0.07);
-    transition: transform 0.2s, box-shadow 0.2s;
+  #toolkit { }
+  .toolkit-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; }
+  .toolkit-block {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:1.4rem;
+    transition:border-color 0.2s;
   }
-  .toolkit-cat:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-  .toolkit-cat-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
-  .toolkit-cat-name { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); margin-bottom: 0.8rem; }
-  .toolkit-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .toolkit-block:hover { border-color:rgba(0,212,255,0.2); }
+  .toolkit-block-icon { font-size:1.2rem; margin-bottom:0.8rem; }
+  .toolkit-block-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.8rem; }
+  .pills { display:flex; flex-wrap:wrap; gap:0.4rem; }
   .pill {
-    background: rgba(0,0,0,0.06); padding: 0.3rem 0.75rem;
-    border-radius: 2rem; font-size: 0.75rem; font-weight: 500; color: var(--black);
-    transition: background 0.2s;
+    background:rgba(255,255,255,0.04); border:1px solid var(--border);
+    padding:0.25rem 0.65rem; border-radius:100px;
+    font-size:0.72rem; color:var(--muted);
+    transition:all 0.2s;
   }
-  .pill:hover { background: var(--green); color: var(--black); }
+  .pill:hover { background:rgba(0,212,255,0.08); border-color:rgba(0,212,255,0.3); color:var(--text); }
 
-  /* REFERENCE */
-  #reference { background: var(--green); }
-  .quote-block {
-    max-width: 780px;
+  /* QUOTE */
+  #reference {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(124,58,237,0.05) 100%);
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
   }
-  .quote-mark { font-size: 6rem; line-height: 0.5; color: rgba(0,0,0,0.15); font-family: Georgia, serif; }
-  .quote-text { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.55; margin: 1rem 0 1.5rem; }
-  .quote-author { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
+  .quote-inner { max-width:720px; }
+  .quote-mark { font-size:4rem; color:var(--accent); opacity:0.3; line-height:1; font-family:Georgia,serif; margin-bottom:-0.5rem; }
+  .quote-text { font-size:1.25rem; font-weight:500; line-height:1.7; color:var(--text); margin-bottom:1.5rem; }
+  .quote-attr { display:flex; align-items:center; gap:0.8rem; }
+  .quote-avatar {
+    width:36px; height:36px; border-radius:50%;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem; font-weight:700; color:var(--bg);
+  }
+  .quote-name { font-size:0.82rem; font-weight:600; color:var(--text); }
+  .quote-role { font-size:0.75rem; color:var(--muted); }
 
   /* CONTACT */
-  #contact { background: var(--black); color: var(--cream); text-align: center; padding: 8rem 2.5rem; }
-  #contact .section-label { justify-content: center; color: rgba(255,255,255,0.4); }
-  #contact .section-label::before { background: var(--green); }
-  .contact-title {
-    font-size: clamp(3rem, 8vw, 7rem); font-weight: 900;
-    letter-spacing: -0.04em; text-transform: uppercase;
-    line-height: 0.92; margin-bottom: 2rem;
+  #contact { text-align:center; }
+  .contact-inner { max-width:600px; margin:0 auto; }
+  .contact-heading { font-size:clamp(2.5rem,6vw,5rem); font-weight:800; letter-spacing:-0.04em; color:var(--white); line-height:1; margin-bottom:1.2rem; }
+  .contact-heading span { background:linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .contact-sub { font-size:1rem; color:var(--muted); line-height:1.7; margin-bottom:2.5rem; }
+  .contact-links { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+  .contact-item {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--border); border-radius:8px;
+    padding:0.7rem 1.2rem; color:var(--muted); text-decoration:none;
+    font-size:0.82rem; transition:all 0.2s;
+    background:rgba(255,255,255,0.02);
   }
-  .contact-title span { color: var(--green); }
-  .contact-info { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 2rem 0; }
-  .contact-link {
-    color: rgba(255,255,255,0.6); text-decoration: none;
-    font-size: 0.9rem; transition: color 0.2s;
-    display: flex; align-items: center; gap: 0.4rem;
-  }
-  .contact-link:hover { color: var(--green); }
+  .contact-item:hover { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.05); }
 
   /* FOOTER */
   footer {
-    background: var(--black); border-top: 1px solid rgba(255,255,255,0.07);
-    padding: 1.5rem 2.5rem; display: flex; justify-content: space-between;
-    align-items: center; flex-wrap: wrap; gap: 1rem;
+    border-top:1px solid var(--border); padding:1.5rem 2rem;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:1rem;
   }
-  footer p { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+  footer p { font-size:0.75rem; color:var(--muted); }
 
-  /* RESPONSIVE */
-  @media(max-width: 768px) {
-    nav { padding: 1rem 1.2rem; }
-    .nav-links { display: none; }
-    section { padding: 4rem 1.2rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
-    .exp-date { padding-top: 0; }
-    #hero { padding: 7rem 1.2rem 3rem; }
-    .hero-deco, .hero-deco2 { display: none; }
+  /* MODAL */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(0,0,0,0.8); backdrop-filter:blur(8px);
+    align-items:center; justify-content:center; padding:1.5rem;
   }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--surface); border:1px solid var(--border);
+    max-width:640px; width:100%; max-height:85vh; overflow-y:auto;
+    border-radius:14px; padding:2.5rem; position:relative;
+    animation:modalIn 0.25s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(16px) scale(0.98)} to{opacity:1;transform:none} }
+  .modal-close {
+    position:absolute; top:1rem; right:1rem;
+    background:rgba(255,255,255,0.06); border:1px solid var(--border);
+    cursor:pointer; width:32px; height:32px; border-radius:6px;
+    color:var(--muted); font-size:0.9rem; display:flex; align-items:center; justify-content:center;
+    transition:background 0.2s;
+  }
+  .modal-close:hover { background:rgba(255,255,255,0.1); color:var(--text); }
+  .modal-eyebrow { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:0.6rem; }
+  .modal-title { font-size:1.8rem; font-weight:800; color:var(--white); letter-spacing:-0.03em; margin-bottom:2rem; }
+  .modal-section { margin-bottom:1.5rem; }
+  .modal-section h4 { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:0.7rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+  .modal-section p, .modal-section li { font-size:0.88rem; color:var(--muted); line-height:1.75; }
+  .modal-section ul { padding-left:1.1rem; }
+  .modal-section li { margin-bottom:0.45rem; }
+  .modal-outcome { background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:8px; padding:1.2rem 1.4rem; }
+  .modal-outcome-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent3); margin-bottom:0.5rem; }
+  .modal-outcome p { color:rgba(255,255,255,0.7); font-size:0.88rem; line-height:1.75; }
 
-  /* FADE-IN ANIMATION */
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: none; }
+  /* ANIMATIONS */
+  .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity:1; transform:none; }
+
+  @media(max-width:768px) {
+    nav { padding:0 1.2rem; }
+    .nav-links { display:none; }
+    section { padding:4rem 1.2rem; }
+    .about-layout { grid-template-columns:1fr; gap:2.5rem; }
+    .skill-cards { grid-template-columns:1fr; }
+    .projects-grid { grid-template-columns:1fr; }
+    .toolkit-grid { grid-template-columns:1fr 1fr; }
+    .exp-item { grid-template-columns:1fr; gap:0.4rem; }
+    .hero-stats { flex-direction:column; width:100%; }
+    .stat { border-right:none; border-bottom:1px solid var(--border); }
+    .stat:last-child { border-bottom:none; }
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="nav">
-  <div class="nav-logo">Tegan Klopper</div>
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Tegan Klopper
+  </div>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
-    <li><a href="#work">Work</a></li>
+    <li><a href="#work">Projects</a></li>
     <li><a href="#toolkit">Toolkit</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Let's Talk</a>
@@ -339,47 +378,83 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-deco"></div>
-  <div class="hero-deco2"></div>
-  <div class="hero-tag">✦ Available for new roles · Sydney, AU</div>
-  <h1 class="hero-headline fade-in">
-    Project<br>
-    Manager &<br>
-    <span>Product</span><br>
-    Lead
-  </h1>
-  <p class="hero-sub fade-in">Turning ambiguous briefs into shipped products. Six years building operational systems, coordinating cross-functional teams, and launching things that actually work.</p>
-  <div class="hero-bottom fade-in">
-    <a href="#work" class="btn btn-dark">View My Work</a>
-    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner fade-in">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Open to new roles &nbsp;·&nbsp; Sydney, Australia
+    </div>
+    <h1>
+      Product Lead.<br>
+      <span class="grad">Builder. Operator.</span>
+    </h1>
+    <p class="hero-sub">
+      Turning ambiguous briefs into shipped products. Six years coordinating cross-functional teams, building operational systems from scratch, and launching things that generate real revenue.
+    </p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">View Projects →</a>
+      <a href="#contact" class="btn-secondary">Get In Touch</a>
+    </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">92%</div><div class="stat-label">On-time delivery rate</div></div>
-      <div class="stat"><div class="stat-num">200K</div><div class="stat-label">AUD/mo revenue driven</div></div>
-      <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Years experience</div></div>
+      <div class="stat">
+        <div class="stat-num"><span>92</span>%</div>
+        <div class="stat-label">On-time delivery rate</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span>200K</span></div>
+        <div class="stat-label">AUD/month revenue driven</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span>2</span></div>
+        <div class="stat-label">AI products launched</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span>6</span> yrs</div>
+        <div class="stat-label">Building from scratch</div>
+      </div>
     </div>
   </div>
-  <div class="hero-scroll">Scroll ↓</div>
 </section>
 
 <!-- ABOUT -->
 <section id="about">
-  <div class="section-label">About Me</div>
-  <div class="about-grid">
-    <div class="fade-in">
-      <p class="about-highlight">I'm Tegan.<br><span>I figure it out.</span></p>
-      <br>
-      <p>I lead AI products from concept to launch, coordinating engineers, designers, marketers and directors, and delivering a 92% on-time rate across two builds now generating around AUD 200K per month. Before that I spent four years running Yolk Media, a social media agency I built from scratch, which in practice meant being the strategist, the project manager, the creative director and the account lead all at once.</p>
-      <p>I've worked across a lot of different problem spaces: film festivals, SaaS platforms, sustainability brands, AI tooling. What's stayed consistent is the part of the job I'm drawn to most: taking something ambiguous, building the structure it needs, and getting it shipped.</p>
-      <p>Founding something teaches you things you can't learn any other way. I know how to move fast without losing quality, how to hold a vision together across a team that doesn't always agree, and how to make decisions when there's no playbook and the clock is running. <strong>Now I'm taking that to the next level, bringing everything I've built into an environment with the scale, the talent and the ambition to match it.</strong></p>
-    </div>
-    <div class="fade-in">
-      <div class="skills-grid">
-        <div class="skill-chip"><strong>Delivery</strong>Program management · Roadmap planning · Agile sprints</div>
-        <div class="skill-chip"><strong>Product</strong>Lifecycle ownership · UX flows · Feature prioritisation</div>
-        <div class="skill-chip"><strong>Marketing</strong>GTM strategy · Campaign execution · Meta & GA4</div>
-        <div class="skill-chip"><strong>AI & Tech</strong>Synthflow · HeyGen · Leonardo AI · Custom GPTs</div>
-        <div class="skill-chip"><strong>Operations</strong>Scope & brief writing · Risk management · Documentation</div>
-        <div class="skill-chip"><strong>Tools</strong>Notion · Jira · Asana · Figma · GitHub · ClickUp</div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">About</div>
+    <div class="section-heading fade-in">Who I am <span>and how I work</span></div>
+    <div class="about-layout">
+      <div class="about-text fade-in">
+        <p>I'm Tegan. I'm a product and operations leader with six years of hands-on experience building, scaling and delivering across some pretty different problem spaces: social agencies, AI platforms, film festivals, sustainability brands and SaaS products. What's stayed consistent across all of it is the same core skillset. I build the systems and processes that let teams move fast without losing quality. I coordinate across engineering, design, marketing and leadership to keep work on track. And I figure out what needs to happen next when nobody has written the playbook yet.</p>
+        <p>I started by building Yolk Media from scratch, which meant being the strategist, the project manager, the creative director and the account lead all at once across 10+ concurrent client accounts. That taught me how to operate under pressure, manage competing priorities without dropping the ball, and build operational infrastructure that actually holds up over time. Three core clients stayed for all four years, which in an agency environment says something.</p>
+        <p>That foundation translated directly into product. I led two AI platforms through the full product lifecycle, from user research and roadmap planning through to launch and post-launch iteration, coordinating cross-functional teams and executive stakeholders with a 92% on-time delivery rate and around AUD 200K per month in revenue across both products.</p>
+        <p><strong>Founding something teaches you things you can't learn any other way. I know how to move fast without losing quality, how to hold a vision together across a team that doesn't always agree, and how to make decisions when there's no playbook and the clock is running. Now I'm taking all of that into an environment with the scale, the talent and the ambition to match it.</strong></p>
+      </div>
+      <div class="skill-cards fade-in">
+        <div class="skill-card">
+          <div class="skill-card-label">Delivery</div>
+          <div class="skill-card-text">Roadmap planning, sprint workflows, risk management, cross-functional coordination</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-label">Product</div>
+          <div class="skill-card-text">Full lifecycle ownership, UX mapping, feature prioritisation, technical briefing</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-label">Marketing</div>
+          <div class="skill-card-text">GTM strategy, campaign execution, Meta Ads, Google Analytics 4</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-label">AI & Tech</div>
+          <div class="skill-card-text">Synthflow, HeyGen, Leonardo AI, custom GPT development, prompt engineering</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-label">Operations</div>
+          <div class="skill-card-text">Process design, scope writing, documentation, stakeholder management</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-label">Tools</div>
+          <div class="skill-card-text">Notion, Jira, Asana, Figma, GitHub, ClickUp, Loom</div>
+        </div>
       </div>
     </div>
   </div>
@@ -387,169 +462,198 @@
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="section-label">Experience</div>
-  <div class="section-title">Where I've<br>Done The Work</div>
-  <div class="exp-list">
+  <div class="container">
+    <div class="section-eyebrow fade-in">Experience</div>
+    <div class="section-heading fade-in">Career timeline</div>
+    <div class="exp-items fade-in">
 
-    <div class="exp-item fade-in" onclick="toggleExp(this)">
-      <div class="exp-date">2025 – 2026</div>
-      <div>
-        <div class="exp-role">Product Lead</div>
-        <div class="exp-title">Proptix AI & Uplifta AI <span class="exp-arrow">↓</span></div>
-        <div class="exp-desc">
-          Led end-to-end delivery of two AI SaaS products simultaneously — from zero structure, no team and no product to live platforms. Owned the full product lifecycle: scope definition, user flow mapping, feature prioritisation, technical briefing, developer recruitment and delivery cadence. Delivered one MVP in 6 weeks on a lean budget. Implemented operational systems that reduced manual workload by 3–4 hours/day and improved team efficiency by ~35%. Integrated Synthflow, HeyGen, Leonardo AI and custom GPTs.
-          <div class="exp-tags">
-            <span class="exp-tag">AI/SaaS</span><span class="exp-tag">Product Management</span><span class="exp-tag">MVP Delivery</span><span class="exp-tag">Developer Management</span><span class="exp-tag">Operations</span>
+      <div class="exp-item" onclick="toggleExp(this)">
+        <div class="exp-date">2025 – 2026</div>
+        <div class="exp-main">
+          <div class="exp-company">Proptix AI & Uplifta AI</div>
+          <div class="exp-role-title">Product Lead</div>
+          <div class="exp-body">
+            <p>Led end-to-end delivery of two AI SaaS products simultaneously. Owned full product lifecycle from scope definition to launch. Delivered one MVP in 6 weeks. Reduced manual workload by 3 to 4 hours per day and improved team efficiency by 35%. Integrated Synthflow, HeyGen, Leonardo AI and custom GPTs.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">AI / SaaS</span><span class="exp-tag">Product Management</span><span class="exp-tag">MVP Delivery</span><span class="exp-tag">Team Leadership</span>
+            </div>
           </div>
         </div>
+        <div class="exp-toggle">↓</div>
       </div>
-    </div>
 
-    <div class="exp-item fade-in" onclick="toggleExp(this)">
-      <div class="exp-date">2022 – Present</div>
-      <div>
-        <div class="exp-role">Founder & Director</div>
-        <div class="exp-title">Yolk Media <span class="exp-arrow">↓</span></div>
-        <div class="exp-desc">
-          Built a social media agency from scratch — owning strategy, operations, client relationships and delivery across 10+ concurrent accounts. Drove 1.5M+ TikTok views and tens of millions of impressions. Led go-to-market campaigns for a Sundance premiere, a Palace Cinemas national festival, and a documentary embedded in Australian Curriculum education resources. Secured coverage in ABC, Broadsheet and Time Out.
-          <div class="exp-tags">
-            <span class="exp-tag">Agency Leadership</span><span class="exp-tag">GTM Strategy</span><span class="exp-tag">Client Management</span><span class="exp-tag">Content & Social</span>
+      <div class="exp-item" onclick="toggleExp(this)">
+        <div class="exp-date">2022 – Present</div>
+        <div class="exp-main">
+          <div class="exp-company">Yolk Media</div>
+          <div class="exp-role-title">Founder & Director</div>
+          <div class="exp-body">
+            <p>Built a social media agency from scratch. Owned strategy, operations and delivery across 10+ concurrent accounts. Drove 1.5M+ TikTok views and tens of millions of impressions. Secured coverage in ABC, Broadsheet and Time Out. Grew entirely through referrals.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">Agency Leadership</span><span class="exp-tag">GTM Strategy</span><span class="exp-tag">Client Management</span>
+            </div>
           </div>
         </div>
+        <div class="exp-toggle">↓</div>
       </div>
-    </div>
 
-    <div class="exp-item fade-in" onclick="toggleExp(this)">
-      <div class="exp-date">2021 – 2022</div>
-      <div>
-        <div class="exp-role">Social Media Manager & Film Booking Officer</div>
-        <div class="exp-title">FanForce Films <span class="exp-arrow">↓</span></div>
-        <div class="exp-desc">
-          Social strategy and community engagement for Australian documentaries, film festivals and cinema events. Managed multi-campaign rollouts including culturally significant First Nations programming and national theatrical releases. Developed skills in stakeholder coordination across distributed international teams.
-          <div class="exp-tags">
-            <span class="exp-tag">Social Strategy</span><span class="exp-tag">Film & Events</span><span class="exp-tag">Campaign Management</span>
+      <div class="exp-item" onclick="toggleExp(this)">
+        <div class="exp-date">2021 – 2022</div>
+        <div class="exp-main">
+          <div class="exp-company">FanForce Films</div>
+          <div class="exp-role-title">Social Media Manager & Film Booking Officer</div>
+          <div class="exp-body">
+            <p>Social strategy and community engagement for Australian documentaries, film festivals and cinema events. Managed multi-campaign rollouts including First Nations programming and national theatrical releases.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">Social Strategy</span><span class="exp-tag">Film & Events</span>
+            </div>
           </div>
         </div>
+        <div class="exp-toggle">↓</div>
       </div>
-    </div>
 
-    <div class="exp-item fade-in" onclick="toggleExp(this)">
-      <div class="exp-date">2020 – 2021</div>
-      <div>
-        <div class="exp-role">Social Media Strategist</div>
-        <div class="exp-title">Reflow (Amsterdam) <span class="exp-arrow">↓</span></div>
-        <div class="exp-desc">
-          Content, storytelling and community building for an award-winning circular design and sustainability brand. Joined as an intern and was hired full-time. Identified product launch campaigns as the highest-impact channel, building coordinated rollouts around new colour range drops. Developed content that spoke directly to the maker and circular design community. Sharp lesson in building brand trust where authenticity is the only currency.
-          <div class="exp-tags">
-            <span class="exp-tag">Brand Strategy</span><span class="exp-tag">Sustainability</span><span class="exp-tag">Community Building</span><span class="exp-tag">Amsterdam</span>
+      <div class="exp-item" onclick="toggleExp(this)">
+        <div class="exp-date">2020 – 2021</div>
+        <div class="exp-main">
+          <div class="exp-company">Reflow — Amsterdam</div>
+          <div class="exp-role-title">Social Media Strategist</div>
+          <div class="exp-body">
+            <p>Content, storytelling and community building for an award-winning circular design and sustainability brand. Joined as an intern and hired full-time. Built product launch campaigns that drove consistent spikes in engagement.</p>
+            <div class="exp-tags">
+              <span class="exp-tag">Brand Strategy</span><span class="exp-tag">Sustainability</span><span class="exp-tag">Community</span>
+            </div>
           </div>
         </div>
+        <div class="exp-toggle">↓</div>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
 
-<!-- WORK / PROJECTS -->
+<!-- PROJECTS -->
 <section id="work">
-  <div class="section-label">Case Studies</div>
-  <div class="section-title">Selected<br>Projects</div>
-  <div class="work-grid">
+  <div class="container">
+    <div class="section-eyebrow fade-in">Projects</div>
+    <div class="section-heading fade-in">Selected work</div>
+    <div class="projects-grid fade-in">
 
-    <div class="work-card fade-in" onclick="openModal('proptix')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #c8b4f5, #9b7fd4);">PROPTIX AI</div>
-      <div class="work-card-body">
-        <div class="work-card-type">AI SaaS · Product Lead</div>
-        <div class="work-card-title">Proptix AI</div>
-        <div class="work-card-desc">Zero to live AI platform for Australian property investors — built from no team, no structure, no product.</div>
-        <div class="work-card-outcome">~AUD 200K/month revenue</div>
+      <div class="project-card" onclick="openModal('proptix')">
+        <div class="project-icon" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);">🏠</div>
+        <div class="project-type">AI SaaS · Product Lead</div>
+        <div class="project-name">Proptix AI</div>
+        <div class="project-desc">Zero to live AI platform for Australian property investors. No team, no structure, no product at the start.</div>
+        <div class="project-metric">↑ ~AUD 200K/mo revenue</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
-    <div class="work-card fade-in" onclick="openModal('uplifta')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #f5dea0, #f5c842);">UPLIFTA AI</div>
-      <div class="work-card-body">
-        <div class="work-card-type">AI SaaS · Product Lead</div>
-        <div class="work-card-title">Uplifta AI</div>
-        <div class="work-card-desc">AI renovation tool — loose concept to live platform with real users in 6 weeks flat.</div>
-        <div class="work-card-outcome">MVP in 6 weeks</div>
+      <div class="project-card" onclick="openModal('uplifta')">
+        <div class="project-icon" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);">⚡</div>
+        <div class="project-type">AI SaaS · Product Lead</div>
+        <div class="project-name">Uplifta AI</div>
+        <div class="project-desc">AI renovation tool built from a loose concept to a live platform with real users in six weeks flat.</div>
+        <div class="project-metric">↑ MVP in 6 weeks</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
-    <div class="work-card fade-in" onclick="openModal('yolk')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #f5f076, #e8e840);">YOLK<br>MEDIA</div>
-      <div class="work-card-body">
-        <div class="work-card-type">Agency · Founder</div>
-        <div class="work-card-title">Yolk Media</div>
-        <div class="work-card-desc">Built a social agency from scratch — 10+ clients, 1.5M+ TikTok views, national press coverage.</div>
-        <div class="work-card-outcome">4 years · 10+ clients</div>
+      <div class="project-card" onclick="openModal('yolk')">
+        <div class="project-icon" style="background:rgba(245,200,66,0.1);border-color:rgba(245,200,66,0.2);">🥚</div>
+        <div class="project-type">Agency · Founder</div>
+        <div class="project-name">Yolk Media</div>
+        <div class="project-desc">Built a social agency from scratch. 10+ clients, 1.5M+ TikTok views, national press coverage.</div>
+        <div class="project-metric">↑ 4 years · 10+ clients</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
-    <div class="work-card fade-in" onclick="openModal('fnff')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #111, #333); color: white;">FNFF</div>
-      <div class="work-card-body">
-        <div class="work-card-type">Film Festival · Campaign</div>
-        <div class="work-card-title">First Nations Film Festival</div>
-        <div class="work-card-desc">Culturally sensitive multi-year campaign earning national coverage across ABC, SMH, Time Out.</div>
-        <div class="work-card-outcome">3 consecutive years</div>
+      <div class="project-card" onclick="openModal('fnff')">
+        <div class="project-icon" style="background:rgba(255,255,255,0.04);border-color:var(--border);">🎬</div>
+        <div class="project-type">Film Festival · Campaign</div>
+        <div class="project-name">First Nations Film Festival</div>
+        <div class="project-desc">Culturally sensitive multi-year campaign. Coverage in ABC, SMH, Time Out, Broadsheet.</div>
+        <div class="project-metric">↑ 3 consecutive years</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
-    <div class="work-card fade-in" onclick="openModal('embrace')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #ffb3c6, #ff6b9d);">EMBRACE<br>KIDS</div>
-      <div class="work-card-body">
-        <div class="work-card-type">Documentary · Campaign</div>
-        <div class="work-card-title">Embrace: Kids</div>
-        <div class="work-card-desc">Directed by Australian of the Year Taryn Brumfitt — now embedded in the Australian Curriculum.</div>
-        <div class="work-card-outcome">National curriculum resource</div>
+      <div class="project-card" onclick="openModal('embrace')">
+        <div class="project-icon" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);">💚</div>
+        <div class="project-type">Documentary · Campaign</div>
+        <div class="project-name">Embrace: Kids</div>
+        <div class="project-desc">Directed by Australian of the Year Taryn Brumfitt. Now embedded in the Australian Curriculum.</div>
+        <div class="project-metric">↑ National curriculum resource</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
-    <div class="work-card fade-in" onclick="openModal('rotting')">
-      <div class="work-card-color" style="background: linear-gradient(135deg, #ff4d4d, #c0392b); color: white;">ROTTING<br>IN THE SUN</div>
-      <div class="work-card-body">
-        <div class="work-card-type">Film · Sundance Premiere</div>
-        <div class="work-card-title">Rotting In The Sun</div>
-        <div class="work-card-desc">Built Australian audience for a Sundance premiere from zero — working directly with the filmmakers.</div>
-        <div class="work-card-outcome">Sundance premiere · National release</div>
+      <div class="project-card" onclick="openModal('rotting')">
+        <div class="project-icon" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);">🎞️</div>
+        <div class="project-type">Film · Sundance Premiere</div>
+        <div class="project-name">Rotting In The Sun</div>
+        <div class="project-desc">Built Australian audience for a Sundance premiere from zero, working directly with the filmmakers.</div>
+        <div class="project-metric">↑ Sundance · National release</div>
+        <span class="project-arrow">View case study →</span>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
 
 <!-- TOOLKIT -->
 <section id="toolkit">
-  <div class="section-label">Toolkit</div>
-  <div class="section-title">Skills &<br>Tools</div>
-  <div class="toolkit-categories">
-    <div class="toolkit-cat fade-in">
-      <div class="toolkit-cat-icon">🚀</div>
-      <div class="toolkit-cat-name">Delivery & PM</div>
-      <div class="toolkit-pills">
-        <span class="pill">Roadmap Planning</span><span class="pill">Sprint / Agile</span><span class="pill">Scope Writing</span><span class="pill">Risk Management</span><span class="pill">Stakeholder Mgmt</span><span class="pill">Cross-functional Coord</span>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Toolkit</div>
+    <div class="section-heading fade-in">Skills & tools</div>
+    <div class="toolkit-grid fade-in">
+      <div class="toolkit-block">
+        <div class="toolkit-block-icon">🚀</div>
+        <div class="toolkit-block-label">Delivery & PM</div>
+        <div class="pills">
+          <span class="pill">Roadmap Planning</span><span class="pill">Agile / Sprints</span><span class="pill">Scope Writing</span><span class="pill">Risk Management</span><span class="pill">Stakeholder Mgmt</span>
+        </div>
+      </div>
+      <div class="toolkit-block">
+        <div class="toolkit-block-icon">🛠️</div>
+        <div class="toolkit-block-label">Project Tools</div>
+        <div class="pills">
+          <span class="pill">Notion</span><span class="pill">Asana</span><span class="pill">Jira</span><span class="pill">ClickUp</span><span class="pill">Monday</span><span class="pill">Figma</span><span class="pill">GitHub</span><span class="pill">Loom</span>
+        </div>
+      </div>
+      <div class="toolkit-block">
+        <div class="toolkit-block-icon">📣</div>
+        <div class="toolkit-block-label">Marketing</div>
+        <div class="pills">
+          <span class="pill">GTM Strategy</span><span class="pill">Meta Ads</span><span class="pill">Google Analytics 4</span><span class="pill">Campaign Planning</span><span class="pill">Sprout Social</span>
+        </div>
+      </div>
+      <div class="toolkit-block">
+        <div class="toolkit-block-icon">🤖</div>
+        <div class="toolkit-block-label">AI & Emerging Tech</div>
+        <div class="pills">
+          <span class="pill">Synthflow</span><span class="pill">HeyGen</span><span class="pill">Leonardo AI</span><span class="pill">Custom GPTs</span><span class="pill">Prompt Engineering</span><span class="pill">Claude</span>
+        </div>
       </div>
     </div>
-    <div class="toolkit-cat fade-in">
-      <div class="toolkit-cat-icon">🛠️</div>
-      <div class="toolkit-cat-name">Project Tools</div>
-      <div class="toolkit-pills">
-        <span class="pill">Notion</span><span class="pill">Asana</span><span class="pill">Jira</span><span class="pill">ClickUp</span><span class="pill">Monday.com</span><span class="pill">Trello</span><span class="pill">Figma</span><span class="pill">GitHub</span><span class="pill">Loom</span>
+  </div>
+</section>
+
+<!-- BEYOND WORK -->
+<section id="beyond" style="border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-eyebrow fade-in">Beyond Work</div>
+    <div class="section-heading fade-in">The other side</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;" class="fade-in">
+      <div class="toolkit-block" style="border-color:rgba(0,229,122,0.2);">
+        <div class="toolkit-block-icon">🧘</div>
+        <div class="toolkit-block-label" style="color:var(--accent);">Yoga Teacher</div>
+        <p style="font-size:0.82rem; color:var(--muted); line-height:1.65; margin-top:0.5rem;">Certified yoga teacher. The practice of showing up, being present and moving with intention carries over into everything else I do.</p>
       </div>
-    </div>
-    <div class="toolkit-cat fade-in">
-      <div class="toolkit-cat-icon">📣</div>
-      <div class="toolkit-cat-name">Marketing & Analytics</div>
-      <div class="toolkit-pills">
-        <span class="pill">GTM Strategy</span><span class="pill">Campaign Planning</span><span class="pill">Meta Ads Manager</span><span class="pill">Google Analytics 4</span><span class="pill">Sprout Social</span><span class="pill">Google Sheets</span>
+      <div class="toolkit-block" style="border-color:rgba(0,229,122,0.2);">
+        <div class="toolkit-block-icon">🌬️</div>
+        <div class="toolkit-block-label" style="color:var(--accent);">Pranayama & Meditation</div>
+        <p style="font-size:0.82rem; color:var(--muted); line-height:1.65; margin-top:0.5rem;">Certified pranayama and meditation teacher. Breathwork and stillness are the things that keep me grounded when everything else is moving fast.</p>
       </div>
-    </div>
-    <div class="toolkit-cat fade-in">
-      <div class="toolkit-cat-icon">🤖</div>
-      <div class="toolkit-cat-name">AI & Emerging Tech</div>
-      <div class="toolkit-pills">
-        <span class="pill">Synthflow</span><span class="pill">HeyGen</span><span class="pill">Leonardo AI</span><span class="pill">ChatGPT</span><span class="pill">Claude</span><span class="pill">Custom GPT Dev</span><span class="pill">Prompt Engineering</span><span class="pill">AI Workflow Integration</span>
+      <div class="toolkit-block" style="border-color:rgba(0,229,122,0.2);">
+        <div class="toolkit-block-icon">🎨</div>
+        <div class="toolkit-block-label" style="color:var(--accent);">Creative Collaborations</div>
+        <p style="font-size:0.82rem; color:var(--muted); line-height:1.65; margin-top:0.5rem;">Independent work across brands I believe in: Nonna's Grocer, Dazed, Pride Is Protest, Lebanese Cherry Pie and Fuoco Chilli Oil.</p>
       </div>
     </div>
   </div>
@@ -557,171 +661,148 @@
 
 <!-- REFERENCE -->
 <section id="reference">
-  <div class="section-label">Reference</div>
-  <div class="quote-block fade-in">
-    <div class="quote-mark">"</div>
-    <p class="quote-text">Tegan was an absolute pleasure to work with. She is highly efficient, responsive, and able to pivot quickly as our needs evolved. What really stood out was her combination of strategic thinking and technical precision: thoughtful best-practice ideas alongside exceptional attention to detail.</p>
-    <div class="quote-author">Pia Choan, BreakFree to Being &nbsp;·&nbsp; More references available on request</div>
+  <div class="container">
+    <div class="section-eyebrow fade-in">Reference</div>
+    <div class="quote-inner fade-in">
+      <div class="quote-mark">"</div>
+      <p class="quote-text">Tegan was an absolute pleasure to work with. She is highly efficient, responsive, and able to pivot quickly as our needs evolved. What really stood out was her combination of strategic thinking and technical precision: thoughtful best-practice ideas alongside exceptional attention to detail in the technical testing and implementation. Tegan consistently went over and above in her communication, and the training videos she created were incredibly clear and empowering. I would happily recommend Tegan to anyone looking for a skilled, reliable, and generous specialist.</p>
+      <div class="quote-attr">
+        <div class="quote-avatar">P</div>
+        <div>
+          <div class="quote-name">Pia Choan</div>
+          <div class="quote-role">BreakFree to Being &nbsp;·&nbsp; More references available on request</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-label">Contact</div>
-  <h2 class="contact-title">Let's Work<br><span>Together</span></h2>
-      <p style="color:rgba(255,255,255,0.5); max-width:480px; margin:0 auto; font-size:1rem; line-height:1.7;">
-    Currently open to product management, project lead, and product operations roles. Sydney-based, open to hybrid and remote.
-  </p>
-  <div class="contact-info">
-    <a href="mailto:tegan.klopper@gmail.com" class="contact-link">✉ tegan.klopper@gmail.com</a>
-    <a href="tel:+61402557102" class="contact-link">📱 +61 402 557 102</a>
-    <span class="contact-link">📍 Sydney, Australia</span>
+  <div class="container">
+    <div class="contact-inner fade-in">
+      <div class="section-eyebrow" style="justify-content:center;">Contact</div>
+      <h2 class="contact-heading">Let's build<br><span>something.</span></h2>
+      <p class="contact-sub">Open to product management, project lead, and product operations roles. Sydney-based, open to hybrid and remote.</p>
+      <div class="contact-links">
+        <a href="mailto:tegan.klopper@gmail.com" class="contact-item">✉ tegan.klopper@gmail.com</a>
+        <a href="tel:+61402557102" class="contact-item">📱 +61 402 557 102</a>
+        <span class="contact-item">📍 Sydney, AU</span>
+      </div>
+    </div>
   </div>
-  <a href="mailto:tegan.klopper@gmail.com" class="btn btn-dark" style="background:var(--green); color:var(--black); margin-top:1.5rem; font-size:1rem; padding:1rem 2.5rem;">Send Me An Email →</a>
 </section>
 
 <footer>
-  <p>© 2026 Tegan Klopper · Sydney, Australia</p>
-  <p>Project Manager · Product Lead · Digital Marketing</p>
+  <p>© 2026 Tegan Klopper</p>
+  <p style="color:var(--muted)">Product Lead · Project Manager · Digital Marketing</p>
 </footer>
 
-<!-- MODALS -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modal-content">
+  <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-body"></div>
   </div>
 </div>
 
 <script>
-// Nav scroll effect
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
-});
-
-// Fade-in observer
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-      obs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
-
-// Experience toggles
-function toggleExp(el) {
-  el.classList.toggle('open');
-}
-
-// Modal data
 const modals = {
   proptix: {
     tag: 'AI SaaS · Product Lead · 2025–2026',
     title: 'Proptix AI',
-    problem: 'A founding team with strong domain knowledge in property investment, a clear vision, and no operational structure. No product, no team, no delivery process.',
+    problem: 'A founding team with strong domain knowledge in property investment, a clear vision, and no operational structure. No product, no team, no delivery process. My job was to build everything they needed to execute, and make sure what got shipped matched what the market actually wanted, not just what the founders assumed.',
     approach: [
-      'Ran structured user discovery conversations before writing a single brief, using insights to sequence the roadmap around highest-value functionality first',
-      'Built a prioritisation framework to evaluate new ideas against user needs, technical complexity and delivery capacity — keeping scope creep in check',
+      'Ran structured conversations with potential users before writing a single brief, using what I heard to sequence the roadmap around the highest-value functionality first',
+      'Built a prioritisation framework that gave the team a shared way to evaluate new ideas against user needs, technical complexity and delivery capacity, keeping scope creep from derailing the timeline',
       'Recruited and managed the development team, wrote all technical briefs and owned delivery cadence from kick-off to launch',
-      'Integrated Synthflow, HeyGen, Leonardo AI and custom GPT assistants across the build',
-      'Built the full brand, website, internal documentation and operational systems from scratch, reducing manual workload by 3–4 hours/day'
+      'Integrated key AI tooling including Synthflow, HeyGen, Leonardo AI and custom GPT assistants',
+      'Built the full brand, website, internal documentation and operational systems from scratch, reducing manual workload by 3 to 4 hours per day and improving team efficiency by approximately 35%'
     ],
-    outcome: 'Proptix launched to hundreds of Australian property investors and is now generating approximately AUD 200K/month in revenue, with a 92% on-time milestone rate across the build.'
+    outcome: 'Proptix launched to hundreds of Australian property investors and is now generating approximately AUD 200K/month in revenue, with a 92% on-time milestone rate across the build. Post-launch success was measured through user retention and engagement, the metric that mattered most in proving the product was solving a real problem, not just attracting sign-ups.'
   },
   uplifta: {
     tag: 'AI SaaS · Product Lead · 2025–2026',
     title: 'Uplifta AI',
-    problem: 'A loose idea for an AI renovation tool — a founding team with a clear problem to solve but no brand, no technical plan and no team. The window to build was tight.',
-    approach: [
-      'Deep competitor analysis to identify gaps and define where Uplifta could credibly differentiate',
-      'Mapped the full user journey and designed all UX/UI before a single line of code was written — giving the developer clarity to move fast',
-      'When an external deadline created timeline pressure mid-build, re-sequenced the roadmap to protect core UX and cut non-essentials to a post-launch backlog',
-      'Recruited and managed the developer throughout, wrote technical briefs and created system architecture',
-      'Built the complete brand identity, tone of voice, visual direction and guidelines alongside the product'
-    ],
+    problem: 'A loose idea for an AI renovation tool with a founding team that had a clear problem but no brand, no technical plan and no team. The window to build was tight.',
+    approach: ['Deep competitor analysis to identify gaps and define where Uplifta could credibly differentiate','Mapped the full user journey and designed all UX/UI before a single line of code was written','When an external deadline created timeline pressure mid-build, re-sequenced the roadmap to protect core UX and cut non-essentials','Recruited and managed the developer, wrote technical briefs and created system architecture','Built the complete brand identity, tone of voice and visual guidelines alongside the product'],
     outcome: 'Uplifta went from a loose concept to a live platform with real users in six weeks, within a tight early-stage budget. Success measured through user retention and repeat engagement.'
   },
   yolk: {
     tag: 'Agency Founder · 2022–Present',
     title: 'Yolk Media',
-    problem: 'Building a multi-client agency from nothing — no inherited client base, no playbook and no safety net. The challenge was building the systems that made consistent, high-quality delivery possible across multiple accounts at once.',
+    problem: 'Building a multi-client agency from nothing, with no inherited client base, no playbook and no safety net. The challenge was never just doing the work. It was building the systems and processes that made consistent, high-quality delivery possible across multiple accounts at once.',
     approach: [
-      'Built all operational infrastructure from scratch: briefing templates, reporting frameworks and delivery workflows',
-      'Used content performance metrics as the primary feedback loop — iterating strategy in real time rather than waiting until the end of a campaign',
-      'When a campaign underperformed, treated it as a diagnostic rather than a failure, adjusted mid-flight and communicated transparently — that response kept clients coming back',
-      'Grew the client base almost entirely through referrals, meaning every engagement had to deliver well enough to generate a recommendation'
+      'Built all operational infrastructure from scratch including briefing templates, reporting frameworks and delivery workflows that made running concurrent accounts without dropping quality possible',
+      'Used content performance metrics as the primary feedback loop, tracking what worked and iterating strategy in real time rather than waiting until the end of a campaign',
+      'When a campaign underperformed, treated it as a diagnostic rather than a failure, adjusted the approach mid-flight and communicated transparently with the client throughout — that response to underperformance was one of the things that kept clients coming back',
+      'Grew the client base almost entirely through referrals, which meant every engagement had to deliver well enough that the client wanted to tell someone else about it'
     ],
-    outcome: 'Four years, 10+ clients, 1.5M+ TikTok views and tens of millions of impressions. Campaigns earned national coverage in ABC, Broadsheet and Time Out. The referral-led growth model meant retention was the business model. And it worked.'
+    outcome: 'Four years, 10+ clients, 1.5M+ TikTok views and tens of millions of impressions across some of Australia\'s most culturally significant brands. Campaigns earned national coverage in ABC, Broadsheet and Time Out. The referral-led growth model meant retention was the business model, and it worked.'
   },
   fnff: {
     tag: 'Film Festival · Campaign · 2021–2023',
     title: 'First Nations Film Festival',
-    problem: 'A culturally significant festival with a small budget and an audience that needed to be found rather than assumed. Messaging had to be developed in close collaboration with First Nations creatives, with cultural protocols respected throughout.',
+    problem: 'A culturally significant festival with a small budget and an audience that needed to be found rather than assumed. Messaging had to be developed in close collaboration with First Nations creatives and community groups, with cultural protocols respected throughout.',
     approach: [
-      'Prioritised press and media outreach as the highest-leverage channel given budget constraints',
+      'Prioritised press and media outreach as the highest-leverage channel given budget constraints, focusing on earning coverage rather than paying for reach',
       'Built the festival\'s entire digital presence from scratch, developing content systems that scaled across three consecutive years',
-      'Coordinated across First Nations creatives, festival partners and community organisations to ensure culturally safe and genuinely representative messaging',
-      'Managed full campaign lifecycle across every cycle including scheduling, community management, reporting and optimisation'
+      'Coordinated across First Nations creatives, festival partners and community organisations to ensure messaging was culturally safe and genuinely representative',
+      'Managed the full campaign lifecycle across every cycle including scheduling, community management, reporting and optimisation'
     ],
-    outcome: 'The festival grew into a recognised annual fixture in the Australian cultural landscape across three consecutive years. Coverage in ABC Radio, Time Out, Broadsheet and the Sydney Morning Herald. Success tracked through ticket sales and attendance.'
+    outcome: 'The festival grew into a recognised annual fixture in the Australian cultural landscape across three consecutive years. Campaigns reached millions of viewers across social, press and partner activations, earning coverage in ABC Radio, Time Out, Broadsheet and the Sydney Morning Herald, with success tracked through ticket sales and attendance.'
   },
   embrace: {
     tag: 'Documentary · Campaign',
     title: 'Embrace: Kids',
-    problem: 'A documentary about helping children love their bodies — that needed to reach well beyond the typical film audience. The campaign had to work across two very different contexts: theatrical release and educational rollout, simultaneously.',
+    problem: 'A documentary about helping children love their bodies and build a healthy relationship with how they look, that needed to reach well beyond the typical film audience. Families, schools and youth organisations were the target, not cinemagoers. That meant building a campaign strategy that worked across two very different contexts, theatrical release and educational rollout, simultaneously.',
     approach: [
-      'Identified educational partner and community activation as the highest-leverage channel, building relationships with schools and educational organisations',
-      'Coordinated with US production and distributor teams to localise global assets for Australian families and educators',
-      'Created tailored content and engagement campaigns for each release context with different messaging for each audience',
-      'Managed press outreach and influencer relationships to build broader awareness alongside the community-led strategy'
+      'Identified educational partner and community activation as the highest-leverage channel, building relationships with schools, educational organisations and community groups to drive uptake beyond traditional film marketing audiences',
+      'Coordinated with the US production and distributor teams to localise global assets so they felt relevant to Australian families and educators rather than just repurposed',
+      'Created content and engagement campaigns tailored to each release context, theatrical screenings, digital release and educational rollout, with different messaging for each audience',
+      'Managed press outreach and influencer relationships to build broader awareness and credibility alongside the community-led strategy'
     ],
-    outcome: 'Embrace: Kids is now embedded in Australian Curriculum education resources, directed by Taryn Brumfitt, Australian of the Year. One of the most tangible, measurable outcomes across all campaigns worked on.'
+    outcome: 'Embrace: Kids is now embedded in Australian Curriculum education resources, directed by Taryn Brumfitt, Australian of the Year, and recognised nationally for its impact on conversations around children\'s body image and self-worth. Success was measured through educational uptake, making it one of the most tangible outcomes across all the campaigns I have worked on.'
   },
   rotting: {
     tag: 'Film · Sundance Premiere',
     title: 'Rotting In The Sun',
-    problem: 'A high-profile indie film premiering at Sundance with significant international attention and zero Australian awareness. Building an audience in a market that hadn\'t heard of it, while coordinating with a US production team on a fixed premiere timeline.',
+    problem: 'A high-profile indie film premiering at Sundance with significant international attention and zero Australian awareness. The challenge was building an audience from scratch in a market that hadn\'t heard of it, while staying aligned with a US production team running their own global campaign on a fixed premiere timeline.',
     approach: [
-      'Developed the full Australian social strategy from the ground up, localising the campaign to feel native rather than adapted from US assets',
-      'Led organic social content as the primary channel, building awareness around the film\'s themes and cultural moment',
+      'Developed the full Australian social strategy from the ground up, localising the campaign so it felt native to Australian audiences rather than adapted from US assets',
+      'Led organic social content as the primary channel, building awareness and community around the film\'s themes and cultural moment rather than relying on paid reach',
       'Worked directly with the production team including Jordan Firstman and Sebastián Silva on social assets, timing and regional strategy',
-      'Coordinated with FanForce Films and the US team across all campaign phases, managing time zones and competing priorities'
+      'Coordinated with FanForce Films and the US team across all campaign phases, managing competing priorities and communication across time zones to keep the Australian rollout on track'
     ],
-    outcome: 'The campaign successfully built local audience awareness and community engagement ahead of theatrical and festival screenings in Australia. A sharp lesson in stakeholder management under a hard international deadline.'
+    outcome: 'The campaign successfully built local audience awareness and community engagement ahead of theatrical and festival screenings in Australia, with success measured through ticket sales and attendance. Collaborating directly with the filmmakers and coordinating a localisation strategy across an international team was a sharp lesson in stakeholder management under a hard deadline.'
   }
 };
 
 function openModal(key) {
   const d = modals[key];
   document.getElementById('modal-body').innerHTML = `
-    <div class="modal-tag">${d.tag}</div>
+    <div class="modal-eyebrow">${d.tag}</div>
     <div class="modal-title">${d.title}</div>
-    <div class="modal-section">
-      <h4>The Problem</h4>
-      <p>${d.problem}</p>
-    </div>
-    <div class="modal-section">
-      <h4>How I Approached It</h4>
-      <ul>${d.approach.map(a => `<li>${a}</li>`).join('')}</ul>
-    </div>
-    <div class="modal-outcome">
-      <strong>The Outcome</strong>
-      <p>${d.outcome}</p>
-    </div>
+    <div class="modal-section"><h4>The Problem</h4><p>${d.problem}</p></div>
+    <div class="modal-section"><h4>How I Approached It</h4><ul>${d.approach.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+    <div class="modal-outcome"><div class="modal-outcome-label">The Outcome</div><p>${d.outcome}</p></div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 }
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function closeModalOutside(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+function toggleExp(el) { el.classList.toggle('open'); }
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); obs.unobserve(e.target); } });
+},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
